@@ -4063,7 +4063,6 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/os: linux
-      hostNetwork: true
       tolerations:
         # Make sure calico-node gets scheduled on all nodes.
         - effect: NoSchedule
@@ -4108,6 +4107,8 @@ spec:
           securityContext:
             privileged: false
             allowPrivilegeEscalation : false
+            runAsNonRoot : true
+            readOnlyRootFilesystem : true
         # This container installs the CNI binaries
         # and CNI network config file on each node.
         - name: install-cni
@@ -4150,6 +4151,8 @@ spec:
           securityContext:
             privileged: false
             allowPrivilegeEscalation : false
+            runAsNonRoot : true
+            readOnlyRootFilesystem : true
         # Adds a Flex Volume Driver that creates a per-pod Unix Domain Socket to allow Dikastes
         # to communicate with Felix over the Policy Sync API.
         - name: flexvol-driver
@@ -4160,6 +4163,8 @@ spec:
           securityContext:
             privileged: false
             allowPrivilegeEscalation : false
+            readOnlyRootFilesystem : true
+            runAsNonRoot : true
       containers:
         # Runs calico-node container on each Kubernetes node. This
         # container programs network policy and routes on each
@@ -4238,6 +4243,7 @@ spec:
           securityContext:
             privileged: false
             allowPrivilegeEscalation : false
+            readOnlyRootFilesystem : true
             runAsNonRoot : true
           resources:
             requests:
@@ -4291,7 +4297,7 @@ spec:
               mountPath: /sys/fs/
               # Bidirectional means that, if we mount the BPF filesystem at /sys/fs/bpf it will propagate to the host.
               # If the host is known to mount that filesystem already then Bidirectional can be omitted.
-              mountPropagation: Bidirectional
+              mountPropagation: None
             - name: cni-log-dir
               mountPath: /var/log/calico/cni
               readOnly: true
