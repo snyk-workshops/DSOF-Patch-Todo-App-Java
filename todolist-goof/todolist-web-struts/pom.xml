@@ -20,6 +20,10 @@
                     <groupId>javax</groupId>
                     <artifactId>javaee-web-api</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>jstl</artifactId>
+                </exclusion>
             </exclusions>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
@@ -38,13 +42,7 @@
         <!-- javaee web api -->
         <dependency>
             <groupId>javax</groupId>
-            <artifactId>javaee-web-api</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>javax.servlet</groupId>
-                    <artifactId>jstl</artifactId>
-                </exclusion>
-            </exclusions>
+            <artifactId>javaee-web-api</artifactId>            
             <version>8.0.1</version>
             <scope>provided</scope>
         </dependency>
