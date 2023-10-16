@@ -20,8 +20,27 @@ spec:
       - image: ${DOCKER_ACCOUNT}/java-goof:latest
         imagePullPolicy: Always
         name: java-goof
+        livenessProbe:
+          exec:
+            command:
+            - cat
+            - /tmp/healthy
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
         securityContext:
           readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          runAsUser: 10000
+          capabilities:
+            drop: [ALL]
         volumeMounts:
           - mountPath: /usr/local/tomcat/temp
             name: tomcat-temp
@@ -47,6 +66,7 @@ metadata:
   name: goof
 spec:
   type: LoadBalancer
+  loadBalancerSourceRanges: [0.0.0.0/0] 
   ports:
     - port: 80
       protocol: TCP
