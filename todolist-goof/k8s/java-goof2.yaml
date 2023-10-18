@@ -20,11 +20,29 @@ spec:
       - image: ${DOCKER_ACCOUNT}/java-goof:latest
         imagePullPolicy: Always
         name: java-goof
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
         securityContext:
           runAsNonRoot: true
           runAsUser: 65534 #nobody
           runAsGroup: 65534 #nobody
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: [ALL]
       restartPolicy: Always
+      livenessProbe:
+        exec:
+          command:
+          - cat
+          - /tmp/healthy
+        initialDelaySeconds: 3
+        periodSeconds: 5
 ---
 apiVersion: v1
 kind: Service
@@ -34,6 +52,7 @@ metadata:
   name: goof
 spec:
   type: LoadBalancer
+  loadBalancerSourceRanges: ["0.0.0.0/0"]
   ports:
     - port: 80
       protocol: TCP

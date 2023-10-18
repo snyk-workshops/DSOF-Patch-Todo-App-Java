@@ -4063,7 +4063,7 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/os: linux
-      hostNetwork: true
+      hostNetwork: false
       tolerations:
         # Make sure calico-node gets scheduled on all nodes.
         - effect: NoSchedule
@@ -4106,7 +4106,11 @@ spec:
             - mountPath: /host/opt/cni/bin
               name: cni-bin-dir
           securityContext:
-            privileged: true
+            privileged: false
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
         # This container installs the CNI binaries
         # and CNI network config file on each node.
         - name: install-cni
@@ -4147,7 +4151,11 @@ spec:
             - mountPath: /host/etc/cni/net.d
               name: cni-net-dir
           securityContext:
-            privileged: true
+            privileged: false
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
         # Adds a Flex Volume Driver that creates a per-pod Unix Domain Socket to allow Dikastes
         # to communicate with Felix over the Policy Sync API.
         - name: flexvol-driver
@@ -4156,7 +4164,11 @@ spec:
           - name: flexvol-driver-host
             mountPath: /host/driver
           securityContext:
-            privileged: true
+            privileged: false
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
       containers:
         # Runs calico-node container on each Kubernetes node. This
         # container programs network policy and routes on each
@@ -4233,7 +4245,11 @@ spec:
             - name: FELIX_HEALTHENABLED
               value: "true"
           securityContext:
-            privileged: true
+            privileged: false
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
           resources:
             requests:
               cpu: 250m
@@ -4403,6 +4419,12 @@ spec:
               - /usr/bin/check-status
               - -r
             periodSeconds: 10
+          securityContext:
+            privileged: false
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
 
 ---
 
