@@ -1,4 +1,4 @@
-FROM maven:3-jdk-8-slim as build
+FROM maven:3.9.9-eclipse-temurin-8 as build
 
 RUN mkdir /usr/src/goof
 WORKDIR /usr/src/goof
